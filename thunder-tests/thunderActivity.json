@@ -40,5 +40,33 @@
     "headers": [],
     "params": [],
     "tests": []
+  },
+  {
+    "_id": "44254f56-4694-4ca7-82fd-ed5994e392ec",
+    "colId": "history",
+    "containerId": "",
+    "name": "https://fakestoreapi.com/products/categories",
+    "url": "https://fakestoreapi.com/products/categories",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-05-10T08:57:53.851Z",
+    "modified": "2023-05-10T08:57:53.851Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "d4468fa3-d35f-4b19-bc58-eec36d61473d",
+    "colId": "history",
+    "containerId": "",
+    "name": "https://fakestoreapi.com/users",
+    "url": "https://fakestoreapi.com/users/",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-05-10T09:33:48.983Z",
+    "modified": "2023-05-13T14:32:20.904Z",
+    "headers": [],
+    "params": [],
+    "tests": []
   }
 ]

@@ -1,53 +1,64 @@
 import 'package:flutter/material.dart';
-
-import '../model.dart';
+import 'package:trainingassignment/home_page/detail_product.dart';
+import '../fetch/model.dart';
 
 class ProductCard extends StatelessWidget {
-  final Products product;
-
-  const ProductCard({Key? key, required this.product}) : super(key: key);
+  late Products product;
+  late String username = '';
+  ProductCard({Key? key, required this.product}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Image.network(
-              product.image,
-              width: 100,
-              height: 100,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              product.title,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              '\$${product.price}',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+    final args = ModalRoute.of(context)!.settings.arguments == null
+        ? ScreenArguments()
+        : ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+    if (args.username.isNotEmpty) username = args.username;
+    return GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => DetailProduct(
+                        detail: product,
+                      ),
+                  settings: RouteSettings(
+                      name: '/Products',
+                      arguments: ScreenArguments(username: username))));
+          // Navigator.pushNamed(context, '/Product');
+        },
+        child: Card(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // GestureDetector(onTap: ,)
+              Center(
+                child: Image.network(
+                  product.image,
+                  width: 100,
+                  height: 170,
+                ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  product.title,
+                  style: const TextStyle(fontSize: 16),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  '\$${product.price}',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                const Icon(Icons.star, color: Colors.amber),
-                Text('${product.rating}'),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+        ));
   }
 }
