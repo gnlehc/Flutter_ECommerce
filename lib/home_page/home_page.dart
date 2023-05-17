@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trainingassignment/fetch/model.dart';
 import 'package:trainingassignment/fetch/product.dart';
+import 'package:trainingassignment/footer.dart';
 import '../navbar.dart';
 import 'product_cart.dart';
 
@@ -116,7 +117,7 @@ class _HomeState extends State<Home> {
                             horizontal: 4, vertical: 4),
                       ),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/Category');
+                        Navigator.pushNamed(context, '/category');
                       },
                       child: const Padding(
                         padding: EdgeInsets.only(
@@ -165,27 +166,7 @@ class _HomeState extends State<Home> {
                     },
                     itemCount: listProd.length,
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Container(
-                      color: const Color(0xFF414042),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: SizedBox(
-                          height: 60,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const <Widget>[
-                              Text(
-                                '© BINUSMART',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
+                  Footer()
                 ],
               ),
             ),

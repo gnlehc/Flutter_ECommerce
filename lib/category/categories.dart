@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trainingassignment/bloc/category.dart';
 import 'package:trainingassignment/fetch/model.dart';
@@ -56,6 +57,7 @@ class Categories extends StatefulWidget {
 }
 
 class _CategoriesState extends State<Categories> {
+  // bool isLoading = true;
   String activeCategory = '';
   late String username = '';
   Widget build(BuildContext context) {
@@ -69,9 +71,11 @@ class _CategoriesState extends State<Categories> {
         builder: (context, state) {
           if (state.categories.isEmpty) {
             BlocProvider.of<CategoryBloc>(context).add('get');
+            // isLoading = false;
           }
           if (state.category.isEmpty && state.categories.isNotEmpty) {
             BlocProvider.of<CategoryBloc>(context).add(state.categories[0]);
+            // isLoading = false;
           }
           return Scaffold(
             backgroundColor: const Color(0xf1f1f1f1),
@@ -154,6 +158,9 @@ class _CategoriesState extends State<Categories> {
                       const SizedBox(
                         height: 20,
                       ),
+                      // isLoading
+                      //     ? LoadingIndicator()
+                      //     :
                       CategoryProduct(category: state.category),
                     ],
                   ),

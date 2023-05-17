@@ -33,7 +33,7 @@ class Login extends StatelessWidget {
           return Scaffold(
             backgroundColor: const Color(0xFF2F6799),
             appBar: PreferredSize(
-              preferredSize: Size(100, 50),
+              preferredSize: const Size(100, 50),
               child: Navbar(),
             ),
             body: Form(
@@ -58,9 +58,13 @@ class Login extends StatelessWidget {
                       ),
                       const SizedBox(height: 30),
                       Container(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
+                          border: (state.retcode == 401)
+                              ? Border.all(
+                                  color: const Color(0xFFD50606), width: 2)
+                              : null,
                           color: Colors.grey[300],
                         ),
                         child: TextFormField(
@@ -82,6 +86,10 @@ class Login extends StatelessWidget {
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
+                          border: (state.retcode == 401)
+                              ? Border.all(
+                                  color: const Color(0xFFD50606), width: 2)
+                              : null,
                           color: Colors.grey[300],
                         ),
                         child: TextFormField(
@@ -99,6 +107,19 @@ class Login extends StatelessWidget {
                           },
                         ),
                       ),
+                      if (state.retcode == 401)
+                        Container(
+                          alignment: Alignment.bottomLeft,
+                          child: const Padding(
+                            padding: EdgeInsets.only(top: 12),
+                            child: Text(
+                              'Email or Password is invalid',
+                              style: TextStyle(
+                                color: Color(0xFFD50606),
+                              ),
+                            ),
+                          ),
+                        ),
                       const SizedBox(height: 20),
                       SizedBox(
                         width: double.infinity,
@@ -119,6 +140,9 @@ class Login extends StatelessWidget {
                                 password: _passwordController.text,
                               ),
                             );
+
+                            _emailController.clear();
+                            _passwordController.clear();
                           },
                           child: const Text('Login'),
                         ),

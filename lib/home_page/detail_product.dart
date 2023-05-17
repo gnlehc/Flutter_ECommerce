@@ -1,107 +1,134 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trainingassignment/fetch/model.dart';
+import 'package:trainingassignment/fetch/product.dart';
 import 'package:trainingassignment/navbar.dart';
-import '../fetch/model.dart';
+
+class LoadingIndicator extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+}
 
 class DetailProduct extends StatelessWidget {
-  late Products detail;
-  late String username = '';
-  DetailProduct({Key? key, required this.detail, this.username = ""})
+  final String id;
+  final String username;
+
+  const DetailProduct({Key? key, required this.id, this.username = ""})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments == null
-        ? ScreenArguments()
-        : ModalRoute.of(context)!.settings.arguments as ScreenArguments;
-    if (args.username.isNotEmpty) username = args.username;
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size(100, 50),
-        child: Navbar(
-          username: username,
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Spacer(),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.network(
-                  detail.image,
-                  width: 550,
-                  height: 500,
+    return BlocProvider(
+      create: (context) => DetailBloc(),
+      child: BlocConsumer<DetailBloc, Products>(
+        listener: (context, state) {
+          if (state.title.isEmpty) {
+            BlocProvider.of<DetailBloc>(context).add(id);
+          }
+        },
+        builder: (context, state) {
+          print(id);
+          if (state.title.isNotEmpty) {
+            return Scaffold(
+              appBar: PreferredSize(
+                preferredSize: const Size(100, 50),
+                child: Navbar(
+                  username: username,
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        detail.category,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
-                          color: Colors.grey,
+              ),
+              body: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Spacer(),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.network(
+                          state.image,
+                          width: 550,
+                          height: 500,
                         ),
-                        textAlign: TextAlign.left,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        detail.title,
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        '\$${detail.price}',
-                        style: const TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Description: ${detail.description}',
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w200),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            Align(
-              // alignment: Alignment.bottomCenter,
-              child: Container(
-                width: double.infinity,
-                color: const Color(0xFF414042),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: SizedBox(
-                    height: 60, // Adjust the height as needed
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const <Widget>[
-                        Text(
-                          '© 2023 BINUSMART',
-                          style: TextStyle(color: Colors.white),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                state.category,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.grey,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                state.title,
+                                style: const TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                '\$${state.price}',
+                                style: const TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'Description: ${state.description}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w200,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
+                    const Spacer(),
+                    Align(
+                      child: Container(
+                        width: double.infinity,
+                        color: const Color(0xFF414042),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: SizedBox(
+                            height: 60,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const <Widget>[
+                                Text(
+                                  '© 2023 BINUSMART',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
-        ),
+            );
+          } else {
+            BlocProvider.of<DetailBloc>(context).add(id);
+            return LoadingIndicator();
+          }
+        },
       ),
     );
   }

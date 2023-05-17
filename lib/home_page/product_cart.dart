@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:trainingassignment/home_page/detail_product.dart';
+import '../config/router.dart';
 import '../fetch/model.dart';
 
 class ProductCard extends StatelessWidget {
-  late Products product;
+  final Products product;
   late String username = '';
   ProductCard({Key? key, required this.product}) : super(key: key);
 
@@ -15,16 +15,9 @@ class ProductCard extends StatelessWidget {
     if (args.username.isNotEmpty) username = args.username;
     return GestureDetector(
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => DetailProduct(
-                        detail: product,
-                      ),
-                  settings: RouteSettings(
-                      name: '/Products',
-                      arguments: ScreenArguments(username: username))));
-          // Navigator.pushNamed(context, '/Product');
+          Application.router
+            .navigateTo(context, '/products/${product.id}',
+            routeSettings: RouteSettings(arguments: ScreenArguments(username: username)));
         },
         child: Card(
           child: Column(

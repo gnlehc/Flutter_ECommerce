@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'model.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,25 +22,43 @@ class Product {
   }
 }
 
-// class FilteredProductsBasedOnCategory {
-//   Future<List<Products>> getCategProduct(String category) async {
-//     final response =
-//         await http.get(Uri.parse('https://fakestoreapi.com/products'));
-//     if (response.statusCode == 200) {
-//       List<dynamic> data = json.decode(response.body);
-//       List<Products> products =
-//           data.map((json) => Products.fromJson(json)).toList();
+class DetailBloc extends Bloc<String, Products> {
+  DetailBloc()
+      : super(Products(
+            id: 0,
+            title: "",
+            description: "",
+            category: "",
+            image: "",
+            price: 0,
+            rating: 0)) {
+    on<String>((event, emit) async {
+      try {
+        print(event);
+        var res = await getProductsfromId(event);
+        emit(res);
+      } catch (e) {
+        throw Exception(e);
+      }
+    });
+  }
+}
 
-//       // Filter products based on category
-//       products =
-//           products.where((product) => product.category == category).toList();
-
-//       return products;
-//     } else {
-//       throw Exception('Oops, something went wrong :(');
-//     }
-//   }
-// }
+Future<Products> getProductsfromId(String productId) async {
+  // Products products = Products();
+  final dio = Dio();
+  var res = await dio.get("https://fakestoreapi.com/products/$productId");
+  Products prod = Products(
+    id: res.data['id'],
+    title: res.data['title'],
+    description: res.data['description'],
+    category: res.data['category'],
+    image: res.data['image'],
+    price: res.data['price'].toDouble(),
+    rating: res.data['rating']['rate'],
+  );
+  return prod;
+}
 
 // Get List of Category using flutter DIO
 Future<List<String>> getCategories() async {
@@ -59,9 +77,9 @@ Future<List<String>> getCategories() async {
     // categories = res.data as List<String>;
     // print(categories[0]);
     return categories;
-  } catch (e) {}
-
-  return categories;
+  } catch (e) {
+    throw Exception(e);
+  }
 }
 
 // Get each product based on its category
@@ -73,9 +91,6 @@ Future<List<Products>> getCategoryProd(String category) async {
   try {
     var res =
         await dio.get("https://fakestoreapi.com/products/category/$category");
-    // if (res.statusCode != 200) {
-    //   return categories;
-    // }
     for (var json in res.data) {
       products.add(Products(
         id: json['id'],
@@ -87,47 +102,8 @@ Future<List<Products>> getCategoryProd(String category) async {
         rating: json['rating']['rate'].toInt(),
       ));
     }
-    // categories = res.data as List<String>;
-    // print("title: ${products[0].title}");
     return products;
-  } catch (e) {}
-
-  return products;
+  } catch (e) {
+    throw Exception(e);
+  }
 }
-
-// // Get All Users
-// Future<List<String>> getUsers() async {
-//   List<String> user = [];
-//   final dio = Dio();
-//   try {
-//     var users = await dio.get("https://fakestoreapi.com/users");
-//     for (var allUser in users.data) {
-//       allUser.add(user);
-//     }
-//     return user;
-//   } catch (e) {
-//     throw Exception(e);
-//   }
-// }
-
-// Get Cart Based on userId
-// Future<List<CartModel>> getUsersCart(int id) async {
-//   final dio = Dio();
-//   List<CartModel> carts = [];
-//   try {
-//     var cart = await dio.get("https://fakestoreapi.com/carts/$id");
-//     for (var json in cart.data) {
-//       carts.add(
-//         CartModel(
-//           id: json['id'],
-//           userId: json['userId'],
-//           date: json['date'],
-//           products: json['products']['productId']['quantity'],
-//         ),
-//       );
-//     }
-//   } catch (e) {
-//     throw Exception(e);
-//   }
-//   return carts;
-// }

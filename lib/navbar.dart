@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:trainingassignment/fetch/model.dart';
 
+import 'config/router.dart';
+
 class Navbar extends StatelessWidget {
   late String username;
   Navbar({Key? key, this.username = ""});
@@ -15,27 +17,64 @@ class Navbar extends StatelessWidget {
       automaticallyImplyLeading: false,
       title: Row(
         children: [
-          Text(
-            'BINUS',
-            style: GoogleFonts.inter(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+          // Text(
+          //   'BINUS',
+          //   style: GoogleFonts.inter(
+          //     color: Colors.black,
+          //     fontWeight: FontWeight.bold,
+          //     fontSize: 20,
+          //   ),
+          // ),
+          // Text(
+          //   'MART',
+          //   style: GoogleFonts.inter(
+          //     color: const Color(0xFFF18700),
+          //     fontWeight: FontWeight.bold,
+          //     fontSize: 20,
+          //   ),
+          // ),
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/',
+                  arguments: ScreenArguments(username: username));
+            },
+            style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    EdgeInsets.zero)),
+            child: Text(
+              'BINUS',
+              style: GoogleFonts.inter(
+                color: Colors.black,
+                fontSize: 18,
+                wordSpacing: 0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          Text(
-            'MART',
-            style: GoogleFonts.inter(
-              color: const Color(0xFFF18700),
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/',
+                  arguments: ScreenArguments(username: username));
+            },
+            style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    EdgeInsets.zero)),
+            child: Text(
+              'MART',
+              style: GoogleFonts.inter(
+                color: const Color(0xFFF18700),
+                fontSize: 18,
+                wordSpacing: 0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
+
           // const Spacer(),
           const SizedBox(width: 80),
           TextButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/Category',
+              Navigator.pushNamed(context, '/category',
                   arguments: ScreenArguments(username: username));
             },
             child: Text(
@@ -49,7 +88,7 @@ class Navbar extends StatelessWidget {
           const SizedBox(width: 20),
           TextButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/Cart',
+              Navigator.pushNamed(context, '/cart',
                   arguments: ScreenArguments(username: username));
             },
             child: Text(
@@ -64,7 +103,7 @@ class Navbar extends StatelessWidget {
           username.isEmpty
               ? TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/Login');
+                    Application.router.navigateTo(context, '/login');
                   },
                   child: Text(
                     'Login',

@@ -6,7 +6,7 @@ class Products {
   final String category;
   final String image;
   final double price;
-  final int rating;
+  final double rating;
 
   Products({
     required this.id,
@@ -77,7 +77,7 @@ class CartModel {
   final int userId;
   final String date;
   // final List<CartProduct> products;
-  final List<int> products;
+  late final List<int> products;
 
   CartModel(
       {required this.id,
@@ -86,8 +86,22 @@ class CartModel {
       required this.products});
 }
 
+class CartProductModel extends Products {
+  final int quantity;
+
+  CartProductModel(
+      {required this.quantity,
+      required super.id,
+      required super.title,
+      required super.description,
+      required super.category,
+      required super.image,
+      required super.price,
+      required super.rating});
+}
+
 class ScreenArguments {
   late String username;
-
-  ScreenArguments({this.username = ""});
+  late int userId;
+  ScreenArguments({this.username = "", this.userId = 0});
 }
