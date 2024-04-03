@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
-import '../config/router.dart';
-import '../fetch/model.dart';
+import '../bloc/account/login_event.dart';
+import '../model/login_model.dart';
+import '../model/product_model.dart';
+import '../routes/router.dart';
 
 class ProductCard extends StatelessWidget {
-  final Products product;
+  final MsProduct product;
   late String username = '';
-  ProductCard({Key? key, required this.product}) : super(key: key);
+  ProductCard({Key? key, required this.product}) : super(key: key) {
+    print('ProductCard Created: ${product.title}');
+  }
 
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments == null
-        ? ScreenArguments()
+        ? ScreenArguments(username: username)
         : ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     if (args.username.isNotEmpty) username = args.username;
     return GestureDetector(
         onTap: () {
-          Application.router
-            .navigateTo(context, '/products/${product.id}',
-            routeSettings: RouteSettings(arguments: ScreenArguments(username: username)));
+          Application.router.navigateTo(context, '/products/${product.id}',
+              routeSettings: RouteSettings(
+                  arguments: ScreenArguments(username: username)));
         },
         child: Card(
           child: Column(

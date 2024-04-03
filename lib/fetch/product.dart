@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'model.dart';
+import '../model/product_model.dart';
 import 'package:http/http.dart' as http;
 
 // Get Products using http method
@@ -13,7 +13,7 @@ class Product {
 
       if (response.statusCode == 200) {
         List<dynamic> item = jsonDecode(response.body);
-        List<Products>? prod = item.map((e) => Products.fromJson(e)).toList();
+        List<MsProduct>? prod = item.map((e) => MsProduct.fromJson(e)).toList();
         return prod;
       }
     } catch (e) {
@@ -22,19 +22,18 @@ class Product {
   }
 }
 
-class DetailBloc extends Bloc<String, Products> {
+class DetailBloc extends Bloc<String, MsProduct> {
   DetailBloc()
-      : super(Products(
+      : super(MsProduct(
             id: 0,
             title: "",
             description: "",
             category: "",
             image: "",
             price: 0,
-            rating: 0)) {
+            rating: [])) {
     on<String>((event, emit) async {
       try {
-        print(event);
         var res = await getProductsfromId(event);
         emit(res);
       } catch (e) {
@@ -44,11 +43,11 @@ class DetailBloc extends Bloc<String, Products> {
   }
 }
 
-Future<Products> getProductsfromId(String productId) async {
+Future<MsProduct> getProductsfromId(String productId) async {
   // Products products = Products();
   final dio = Dio();
   var res = await dio.get("https://fakestoreapi.com/products/$productId");
-  Products prod = Products(
+  MsProduct prod = MsProduct(
     id: res.data['id'],
     title: res.data['title'],
     description: res.data['description'],
@@ -63,19 +62,13 @@ Future<Products> getProductsfromId(String productId) async {
 // Get List of Category using flutter DIO
 Future<List<String>> getCategories() async {
   List<String> categories = [];
-
   final dio = Dio();
 
   try {
     var res = await dio.get("https://fakestoreapi.com/products/categories");
-    // if (res.statusCode != 200) {
-    //   return categories;
-    // }
     for (var category in res.data) {
       categories.add(category);
     }
-    // categories = res.data as List<String>;
-    // print(categories[0]);
     return categories;
   } catch (e) {
     throw Exception(e);
@@ -83,8 +76,8 @@ Future<List<String>> getCategories() async {
 }
 
 // Get each product based on its category
-Future<List<Products>> getCategoryProd(String category) async {
-  List<Products> products = [];
+Future<List<MsProduct>> getCategoryProd(String category) async {
+  List<MsProduct> products = [];
 
   final dio = Dio();
 
@@ -92,7 +85,7 @@ Future<List<Products>> getCategoryProd(String category) async {
     var res =
         await dio.get("https://fakestoreapi.com/products/category/$category");
     for (var json in res.data) {
-      products.add(Products(
+      products.add(MsProduct(
         id: json['id'],
         title: json['title'],
         description: json['description'],

@@ -1,137 +1,10 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:trainingassignment/bloc/cart_bloc.dart';
-// import 'package:trainingassignment/navbar.dart';
-// import '../fetch/model.dart';
-
-// class LoadingIndicator extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Center(
-//       child: CircularProgressIndicator(),
-//     );
-//   }
-// }
-
-// class Cart extends StatelessWidget {
-//   late int price = 0;
-//   late String username = "";
-//   @override
-//   Widget build(BuildContext context) {
-//     final args = ModalRoute.of(context)!.settings.arguments == null
-//         ? ScreenArguments()
-//         : ModalRoute.of(context)!.settings.arguments as ScreenArguments;
-//     if (args.username.isNotEmpty) username = args.username;
-
-//     return BlocProvider(
-//       create: (context) => CartBloc(),
-//       child: BlocBuilder<CartBloc, List<CartProductModel>>(
-//         builder: (context, state) {
-//           if (state.isEmpty) {
-//             BlocProvider.of<CartBloc>(context).add(1);
-//             return LoadingIndicator();
-//           } else {
-//             return Scaffold(
-//               appBar: PreferredSize(
-//                 preferredSize: const Size(100, 50),
-//                 child: Navbar(username: username),
-//               ),
-//               body: ListView.separated(
-//                 itemCount: state.length,
-//                 separatorBuilder: (BuildContext context, int index) {
-//                   return const Divider(
-//                     color: Color(0xFF2F6799),
-//                     thickness: 1,
-//                     indent: 20,
-//                     endIndent: 20,
-//                   );
-//                 },
-//                 itemBuilder: (BuildContext context, int index) {
-//                   final e = state[index];
-//                   var totalPrice =
-//                       BlocProvider.of<CartBloc>(context).state.fold(
-//                             0,
-//                             (previousValue, element) =>
-//                                 previousValue +
-//                                 (element.price * element.quantity).toInt(),
-//                           );
-//                   return Padding(
-//                     padding: EdgeInsets.all(40),
-//                     child: Row(
-//                       mainAxisSize: MainAxisSize.max,
-//                       children: <Widget>[
-//                         Padding(
-//                             padding:
-//                                 const EdgeInsets.only(left: 40, right: 100),
-//                             child: Container(
-//                               decoration: BoxDecoration(
-//                                   border: Border.all(color: Color(0xFF2F6799)),
-//                                   borderRadius: BorderRadius.circular(10)),
-//                               child: Image.network(
-//                                 e.image,
-//                                 width: 200,
-//                                 height: 160,
-//                               ),
-//                             )),
-//                         Container(
-//                           width: 170,
-//                           child: Text(
-//                             e.title,
-//                             style: TextStyle(
-//                                 fontSize: 18, fontWeight: FontWeight.normal),
-//                           ),
-//                         ),
-//                         const SizedBox(
-//                           width: 40,
-//                         ),
-//                         Padding(
-//                           padding: const EdgeInsets.only(left: 50, right: 50),
-//                           child: Text(
-//                             "${e.quantity} (pcs)",
-//                             style: TextStyle(fontSize: 18),
-//                           ),
-//                         ),
-//                         Padding(
-//                           padding: const EdgeInsets.only(left: 50, right: 50),
-//                           child: Text(
-//                             "\$${e.price}",
-//                             style: TextStyle(fontSize: 18),
-//                           ),
-//                         ),
-//                         Padding(
-//                           padding: const EdgeInsets.only(left: 50, right: 50),
-//                           child: Text(
-//                             "\$${e.quantity * e.price}",
-//                             style: TextStyle(
-//                                 fontSize: 18, fontWeight: FontWeight.bold),
-//                           ),
-//                         ),
-//                         Padding(
-//                           padding: const EdgeInsets.only(left: 10, right: 10),
-//                           child: Text(
-//                             "\$${(totalPrice)}",
-//                             style: TextStyle(
-//                                 fontSize: 18, fontWeight: FontWeight.bold),
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   );
-//                 },
-//               ),
-//             );
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trainingassignment/bloc/cart_bloc.dart';
 import 'package:trainingassignment/navbar.dart';
-import '../fetch/model.dart';
+
+import '../bloc/account/login_event.dart';
+import '../model/cart_model.dart';
 
 class LoadingIndicator extends StatelessWidget {
   @override
@@ -149,7 +22,7 @@ class Cart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments == null
-        ? ScreenArguments()
+        ? ScreenArguments(username: username)
         : ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     if (args.username.isNotEmpty) username = args.username;
 
@@ -197,8 +70,8 @@ class Cart extends StatelessWidget {
                                     const EdgeInsets.only(left: 40, right: 100),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                      border:
-                                          Border.all(color: const Color(0xFF2F6799)),
+                                      border: Border.all(
+                                          color: const Color(0xFF2F6799)),
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Image.network(
                                     e.image,

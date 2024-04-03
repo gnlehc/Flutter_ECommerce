@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:trainingassignment/fetch/model.dart';
 
-import 'config/router.dart';
+import 'bloc/account/login_event.dart';
+import 'model/login_model.dart';
+import 'routes/router.dart';
 
 class Navbar extends StatelessWidget {
   late String username;
@@ -11,7 +12,7 @@ class Navbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      textTheme: GoogleFonts.interTextTheme(),
+      // textTheme: GoogleFonts.interTextTheme(),
       iconTheme: const IconThemeData(color: Colors.black),
       backgroundColor: Colors.white,
       automaticallyImplyLeading: false,
@@ -129,13 +130,13 @@ class Navbar extends StatelessWidget {
 }
 
 class NavbarLog extends StatelessWidget {
-  final LoginModel username;
+  final MsUser username;
   const NavbarLog({Key? key, required this.username});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      textTheme: GoogleFonts.interTextTheme(),
+      // textTheme: GoogleFonts.interTextTheme(),
       iconTheme: const IconThemeData(color: Colors.black),
       backgroundColor: Colors.white,
       title: Row(

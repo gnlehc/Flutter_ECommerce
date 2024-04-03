@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trainingassignment/fetch/model.dart';
 import 'package:trainingassignment/fetch/product.dart';
 import 'package:trainingassignment/navbar.dart';
+
+import '../model/product_model.dart';
 
 class LoadingIndicator extends StatelessWidget {
   @override
@@ -24,14 +25,13 @@ class DetailProduct extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => DetailBloc(),
-      child: BlocConsumer<DetailBloc, Products>(
+      child: BlocConsumer<DetailBloc, MsProduct>(
         listener: (context, state) {
           if (state.title.isEmpty) {
             BlocProvider.of<DetailBloc>(context).add(id);
           }
         },
         builder: (context, state) {
-          print(id);
           if (state.title.isNotEmpty) {
             return Scaffold(
               appBar: PreferredSize(
@@ -125,8 +125,7 @@ class DetailProduct extends StatelessWidget {
               ),
             );
           } else {
-            BlocProvider.of<DetailBloc>(context).add(id);
-            return LoadingIndicator();
+            return const Text("isempty");
           }
         },
       ),
